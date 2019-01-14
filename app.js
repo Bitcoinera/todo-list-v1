@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const date = require(__dirname + "/date.js");
 
 const app = express();
 
@@ -9,18 +10,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static("public"));
 
-let newItems= []; //stores the client's todo-list tasks
+let newItems= ["Buy Food", "Clean", "Wash dishes"]; 
 let newWorkItems = [];
 
 app.get("/", function(req, res){
     let route = "/work";
 
-    let today = new Date();
-    let options = { weekday: "long", day: "numeric", month: "long"};
+    let day = date.getDate()
 
-    let currentDay = today.toLocaleDateString("en-US", options);
-
-    res.render("list", {listTitle: currentDay, items: newItems, route: route});
+    res.render("list", {listTitle: day, items: newItems, route: route});
 })
 
 app.post("/", function(req, res){
