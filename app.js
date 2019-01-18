@@ -35,8 +35,19 @@ app.get("/", function(req, res){
     let route = "/work";
 
     let day = date.getDate()
+    
+    let dailyItems = [];
 
-    res.render("list", {listTitle: day, items: Item, route: route});
+    Item.find({}, function(err, items){
+        if (err) { throw err} else {
+            items.forEach(function(item){
+                dailyItems.push(item.item);
+            })
+        };
+
+        res.render("list", {listTitle: day, items: dailyItems, route: route});
+    })
+    
 })
 
 app.post("/", function(req, res){
@@ -62,8 +73,18 @@ app.post("/", function(req, res){
 app.get("/work", function(req, res){
 
     let route = "/";
-   
-    res.render("list", {listTitle: "Work List", items: Workitem, route: route});
+
+    let workItems = [];
+
+    Workitem.find({}, function(err, workitems){
+        if (err) throw err;
+        workitems.forEach(function(workitem){
+            workItems.push(workitem.item);
+        });
+    
+        res.render("list", {listTitle: "Work List", items: workItems, route: route});
+    })
+    
 })
 
 app.listen(3000, function(){
