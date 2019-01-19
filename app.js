@@ -44,7 +44,7 @@ app.get("/", function(req, res){
                 dailyItems.push(item.item);
             })
         };
-
+        
         res.render("list", {listTitle: day, items: dailyItems, route: route});
     })
     
@@ -65,9 +65,33 @@ app.post("/", function(req, res){
     const item = new Item({item: req.body.newItem});
     
     item.save();
-        
+
     res.redirect("/");
     }
+})
+
+app.post("/delete/", function(req, res){
+   
+    let deleteItem = req.body.checkbox;
+    
+    Workitem.deleteOne({item: deleteItem}, function(err){
+        if (err) { throw err} else {
+            console.log("Workitem was deleted");
+        }
+        res.redirect("/work");
+    })   
+})
+
+app.post("/delete/work", function(req, res){
+
+    let deleteItem = req.body.checkbox;
+
+    Item.deleteOne({item: deleteItem}, function(err){
+        if (err) { throw err} else {
+            console.log("Item was deleted");
+        }
+        res.redirect("/");
+    }) 
 })
 
 app.get("/work", function(req, res){

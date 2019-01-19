@@ -122,3 +122,9 @@ footer {
   text-align: center;
   margin-top: 5%;
 }
+
+.switch {
+  box-shadow: 5px 5px 5px #585757;
+  height: 100px; width: 100px;
+  border: 2px solid rgba(75, 0, 209, 0.75);
+}

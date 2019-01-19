@@ -5,12 +5,15 @@
     </div>
     
     <div class="box">
-        <% for(var i=0; i < items.length; i++) {%>
-        <div class="item">
-            <input type="checkbox">
-            <p><%= items[i] %></p>
-        </div>
-        <% } %>
+
+        <% items.forEach(function(item){%>
+        <form action="/delete<%= route %>" method="POST" style="margin-left: 5px">
+            <div class="item">
+                <input type="checkbox" name="checkbox" value="<%= item%>" onChange="this.form.submit()">
+                <p><%= item %></p>
+            </div>
+        </form>
+            <% }) %>
 
         <form action="/" method="post">
             <input type="text" name="newItem" placeholder="Task To Do" autocomplete="off" autofocus>
@@ -19,7 +22,7 @@
     </div>
     
     <form action=<%= route %> method="GET">
-        <button style="height: 100px; width: 100px" type="submit" name="switchList">Switch List</button>
+        <button class="switch" type="submit" name="switchList">Switch List</button>
     </form>
 
 <%- include("footer") -%>
