@@ -48,6 +48,7 @@ const customItems = [item1, item2];
 app.get("/", function(req, res){
 
     let switchroute = "/work";
+    let postroute = "/home";
 
     let day = date.getDate()
     
@@ -60,7 +61,7 @@ app.get("/", function(req, res){
             })
         };
         
-        res.render("list", {listTitle: day, items: dailyItems, postroute: "/", switchroute: switchroute});
+        res.render("list", {listTitle: day, items: dailyItems, postroute: postroute, switchroute: switchroute});
     })  
 })
 
@@ -104,7 +105,7 @@ app.get("/:customListName", function(req, res){
     })
 })
 
-app.post("/", function(req, res){
+app.post("/home", function(req, res){
 
     const item = new Item({item: req.body.newItem});
     
@@ -133,8 +134,8 @@ app.post("/:customListName", function(req, res){
     })
 })
 
-app.post("/delete/", function(req, res){
-
+app.post("/delete/home", function(req, res){
+    console.log(req.body.checkbox);
     let deleteItem = req.body.checkbox;
 
     Item.deleteOne({item: deleteItem}, function(err){
