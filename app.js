@@ -22,8 +22,6 @@ var itemSchema = mongoose.Schema({
 
 const Item = mongoose.model('Item', itemSchema);
 
-const Workitem = mongoose.model('Workitem', itemSchema);
-
 const listSchema = {
     name: {
         type: String,
@@ -47,7 +45,6 @@ const customItems = [item1, item2];
 
 app.get("/", function(req, res){
 
-    let switchroute = "/work";
     let postroute = "/home";
 
     let day = date.getDate()
@@ -61,25 +58,8 @@ app.get("/", function(req, res){
             })
         };
         
-        res.render("list", {listTitle: day, items: dailyItems, postroute: postroute, switchroute: switchroute});
+        res.render("list", {listTitle: day, items: dailyItems, postroute: postroute});
     })  
-})
-
-app.get("/work", function(req, res){
-
-    let switchroute = "/";
-    let postroute = "/work";
-
-    let workItems = [];
-
-    Workitem.find({}, function(err, workitems){
-        if (err) throw err;
-        workitems.forEach(function(workitem){
-            workItems.push(workitem);
-        });
-    
-        res.render("list", {listTitle: "Work List", items: workItems, postroute: postroute, switchroute: switchroute});
-    })
 })
 
 app.get("/:customListName", function(req, res){
@@ -99,63 +79,41 @@ app.get("/:customListName", function(req, res){
                 res.redirect("/" + customListName);
             } else {
               
-                res.render("list", {listTitle: foundList.name, items: foundList.items, postroute: "/" + customListName, switchroute: "/"});
+                res.render("list", {listTitle: foundList.name, items: foundList.items, postroute: "/" + customListName});
             }
         }
     })
 })
 
-app.post("/home", function(req, res){
-
-    const item = new Item({item: req.body.newItem});
-    
-    item.save();
-
-    res.redirect("/");
-})
-
-app.post("/work", function(req, res){
-    const workitem = new Workitem({item: req.body.newItem});
-        
-    workitem.save();
-
-    res.redirect("/work");
-})
-
-app.post("/:customListName", function(req, res){
-    const customListName = req.params.customListName;
+app.post("/", function(req, res){
+    let listTitle = req.body.list;
     const item = new Item({item: req.body.newItem});
 
-    customItems.push(item);
+    if (listTitle.includes("Sunday") || listTitle.includes("Monday") || listTitle.includes("Tuesday") || listTitle.includes("Wednesday") || listTitle.includes("Thursday") || listTitle.includes("Friday") || listTitle.includes("Saturday")){
     
-    List.updateOne({name: customListName},{items: customItems}, function(err, list){
-        if (err) { throw err} 
-        res.redirect("/" + customListName);
-    })
+        item.save();
+
+        res.redirect("/");
+    } else {
+
+        List.findOne({name: listTitle}, function(err, foundList){
+            foundList.items.push(item);
+            foundList.save();
+
+            res.redirect("/" + listTitle);
+        })
+    }
 })
 
 app.post("/delete/home", function(req, res){
-    console.log(req.body.checkbox);
+   
     let deleteItem = req.body.checkbox;
 
     Item.deleteOne({item: deleteItem}, function(err){
-        if (err) { throw err} else {
-            console.log("Item was deleted");
-        }
+        if (err) { throw err} 
+
         res.redirect("/");
     }) 
-})
-
-app.post("/delete/work", function(req, res){
-   
-    let deleteItem = req.body.checkbox;
-    
-    Workitem.deleteOne({item: deleteItem}, function(err){
-        if (err) { throw err} else {
-            console.log("Workitem was deleted");
-        }
-        res.redirect("/work");
-    })   
 })
 
 app.post("/delete/:customListName", function(req, res){
@@ -167,7 +125,7 @@ app.post("/delete/:customListName", function(req, res){
     List.updateOne({name: customListName},{items: customItems}, function(err, list){
         if (err) { throw err} 
         res.redirect("/" + customListName);
-    })
+    })  
 })
 
 app.listen(3000, function(){

@@ -15,14 +15,14 @@
         </form>
             <% }) %>
 
-        <form action=<%= postroute%> method="post">
+        <form action="/" method="post">
             <input type="text" name="newItem" placeholder="Task To Do" autocomplete="off" autofocus>
-            <button type="submit" name="list" value=<%= listTitle %>>+</button>
+            <button type="submit" name="list" value="<%= listTitle %>">+</button>
         </form>
     </div>
     
-    <form action=<%= switchroute %> method="GET">
-        <button class="switch" type="submit" name="switchList">Switch List</button>
+    <form action="/" method="GET">
+        <button class="switch" type="submit" name="home">Home</button>
     </form>
 
 <%- include("footer") -%>
