@@ -7,21 +7,21 @@
     <div class="box">
 
         <% items.forEach(function(item){%>
-        <form action="/delete<%= route %>" method="POST" style="margin-left: 5px">
+        <form action="/delete<%= postroute %>" method="POST" style="margin-left: 5px">
             <div class="item">
-                <input type="checkbox" name="checkbox" value="<%= item%>" onChange="this.form.submit()">
+                <input type="checkbox" name="checkbox" value="<%= item.item%>" onChange="this.form.submit()">
                 <p><%= item.item %></p>
             </div>
         </form>
             <% }) %>
 
-        <form action="/" method="post">
+        <form action=<%= postroute%> method="post">
             <input type="text" name="newItem" placeholder="Task To Do" autocomplete="off" autofocus>
             <button type="submit" name="list" value=<%= listTitle %>>+</button>
         </form>
     </div>
     
-    <form action=<%= route %> method="GET">
+    <form action=<%= switchroute %> method="GET">
         <button class="switch" type="submit" name="switchList">Switch List</button>
     </form>
 
