@@ -10,7 +10,7 @@
         <form action="/delete<%= route %>" method="POST" style="margin-left: 5px">
             <div class="item">
                 <input type="checkbox" name="checkbox" value="<%= item%>" onChange="this.form.submit()">
-                <p><%= item %></p>
+                <p><%= item.item %></p>
             </div>
         </form>
             <% }) %>
