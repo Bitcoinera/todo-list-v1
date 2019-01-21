@@ -1,4 +1,4 @@
-html {
+body {
   background-color: #E4E9FD;
   background-image: -webkit-linear-gradient(65deg, #A683E3 50%, #E4E9FD 50%);
   min-height: 1000px;
@@ -8,6 +8,30 @@ html {
 h1 {
   color: #fff;
   padding: 10px;
+}
+
+.navbar {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border: 0;
+  border-radius: 0;
+  margin-bottom: 0;
+  font-size: 20px;
+  letter-spacing: 5px;
+}
+
+.navbar-brand {
+  color: rgba(64, 16, 146) !important;
+  font-family: 'Raleway', sans-serif;
+  font-size: 25px;
+}
+
+.navbar-nav li a {
+  color: #A683E3 !important;
+}
+
+.navbar-nav li a:hover {
+  color: rgba(64, 16, 146) !important;
 }
 
 .box {
