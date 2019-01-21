@@ -41,14 +41,18 @@ const item2 = new Item({
     item: "Delete by checking the checkbox"
 })
 
-const customItems = [item1, item2];
+const item3 = new Item({
+    item: "Create your own custom list just by typing its name in the url"
+})
+
+const customItems = [item1, item2, item3];
 
 
 app.get("/", function(req, res){
 
     let day = date.getDate()
-    
-    let dailyItems = [];
+
+    let dailyItems = customItems;
 
     let listLists = [];
 
