@@ -45,14 +45,14 @@ const item3 = new Item({
     item: "Create your own custom list just by typing its name in the url"
 })
 
-const customItems = [item1, item2, item3];
+const defaultItems = [item1, item2, item3];
 
 
 app.get("/", function(req, res){
 
     let day = date.getDate()
 
-    let dailyItems = customItems;
+    let dailyItems = defaultItems;
 
     let listLists = [];
 
@@ -86,7 +86,7 @@ app.get("/:customListName", function(req, res){
             if (foundList === null){
                 const list = new List({
                     name: customListName,
-                    items: customItems
+                    items: defaultItems
                 })
             
                 list.save();
@@ -147,7 +147,17 @@ app.post("/delete", function(req, res){
             }
         })  
     }
-   
+})
+
+app.post("/deletelist", function(req, res){
+    let listTitle = req.body.listName;
+    console.log("Deleting list");
+    List.deleteOne({name: listTitle}, function(err){
+        if (!err) {
+            console.log("Succesfully deleted list " + listTitle);
+            res.redirect("/");
+        }
+    })
 })
 
 app.listen(3000, function(){

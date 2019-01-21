@@ -40,4 +40,9 @@
         <button class="switch" type="submit" name="home">Home</button>
     </form>
 
+    <form action="/deletelist" method="POST">
+        <input type="hidden" name="listName" value="<%= listTitle%>"></input>
+        <button class="switch" type="submit">Delete List</button>
+    </form>
+
 <%- include("footer") -%>
