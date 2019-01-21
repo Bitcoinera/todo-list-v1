@@ -52,20 +52,19 @@ app.get("/", function(req, res){
 
     let day = date.getDate()
 
-    let dailyItems = defaultItems;
-
     let listLists = [];
 
     Item.find({}, function(err, items){
-        if (err) { throw err} else {
-           
-            if (dailyItems.length <= 3) {
-                items.forEach(function(item){
-                    dailyItems.push(item);
-                })
-            }
-        };
+        if (!err) {
         
+        if (items.length === 0) {
+            Item.insertMany(defaultItems, function(err){
+                if (!err) {
+                    console.log("Default items successfully saved");
+                }
+            })
+        }
+
         List.find({}, function(err, lists){
             if (!err) {
                 lists.forEach(function(list){
@@ -73,16 +72,21 @@ app.get("/", function(req, res){
                 })
             }
         
-        res.render("list", {listTitle: day, items: dailyItems, lists: listLists});
+        res.render("list", {listTitle: day, items: items, lists: listLists});
         })
-    })  
+        }  
+    })
+})
+
+app.get("/favicon.ico", function(req, res){
+    res.redirect("/");
 })
 
 app.get("/:customListName", function(req, res){
 
     const customListName = _.capitalize(req.params.customListName);
     let listLists = [];
-
+  
     List.findOne({name: customListName}, function(err, foundList){
         if (err){ throw err} else {
            
@@ -91,7 +95,7 @@ app.get("/:customListName", function(req, res){
                     name: customListName,
                     items: defaultItems
                 })
-            
+
                 list.save();
                 res.redirect("/" + customListName);
             } else {
@@ -101,6 +105,7 @@ app.get("/:customListName", function(req, res){
                             listLists.push(list.name);
                         })
                     }
+                   
                 res.render("list", {listTitle: foundList.name, items: foundList.items, lists: listLists});
                 })
             }
