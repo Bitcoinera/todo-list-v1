@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/todolist", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://admin-ana:Ha7aIBDCaoMmNzhf@cluster0-hbymp.mongodb.net/todolistDB", {useNewUrlParser: true});
 
 var itemSchema = mongoose.Schema({
     item: {
@@ -167,6 +167,11 @@ app.post("/deletelist", function(req, res){
     })
 })
 
-app.listen(3000, function(){
-    console.log("The server is running on port 3000");
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+
+app.listen(port, function(){
+    console.log("The server has started successfully");
 })
