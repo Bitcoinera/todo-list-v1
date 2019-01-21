@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const date = require(__dirname + "/date.js");
 const mongoose = require("mongoose");
+const _ = require("lodash");
 
 const app = express();
 
@@ -64,7 +65,7 @@ app.get("/", function(req, res){
 
 app.get("/:customListName", function(req, res){
 
-    const customListName = req.params.customListName;
+    const customListName = _.capitalize(req.params.customListName);
 
     List.findOne({name: customListName}, function(err, foundList){
         if (err){ throw err} else {
@@ -99,33 +100,35 @@ app.post("/", function(req, res){
         List.findOne({name: listTitle}, function(err, foundList){
             foundList.items.push(item);
             foundList.save();
-
+            if (!err){
             res.redirect("/" + listTitle);
+            }
         })
     }
 })
 
-app.post("/delete/home", function(req, res){
+app.post("/delete", function(req, res){
    
     let deleteItem = req.body.checkbox;
+    let listTitle = req.body.listName;
 
-    Item.deleteOne({item: deleteItem}, function(err){
-        if (err) { throw err} 
-
-        res.redirect("/");
-    }) 
-})
-
-app.post("/delete/:customListName", function(req, res){
-    const customListName = req.params.customListName;
-    let deleteItem = new Item({item: req.body.checkbox});
-
-    customItems.pop(deleteItem);
+    if (listTitle.includes("Sunday") || listTitle.includes("Monday") || listTitle.includes("Tuesday") || listTitle.includes("Wednesday") || listTitle.includes("Thursday") || listTitle.includes("Friday") || listTitle.includes("Saturday")){
+        Item.deleteOne({item: deleteItem}, function(err){
+            if (err) { throw err} 
     
-    List.updateOne({name: customListName},{items: customItems}, function(err, list){
-        if (err) { throw err} 
-        res.redirect("/" + customListName);
-    })  
+            res.redirect("/");
+        }) 
+    } else {
+
+        List.findOne({name: listTitle}, function(err, foundList){
+            foundList.items.pop(deleteItem);
+            foundList.save();
+            if (!err) {
+            res.redirect("/" + listTitle);
+            }
+        })  
+    }
+   
 })
 
 app.listen(3000, function(){

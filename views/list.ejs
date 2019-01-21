@@ -7,11 +7,12 @@
     <div class="box">
 
         <% items.forEach(function(item){%>
-        <form action="/delete<%= postroute %>" method="POST" style="margin-left: 5px">
+        <form action="/delete" method="POST" style="margin-left: 5px">
             <div class="item">
                 <input type="checkbox" name="checkbox" value="<%= item.item%>" onChange="this.form.submit()">
                 <p><%= item.item %></p>
             </div>
+            <input type="hidden" name="listName" value="<%= listTitle%>"></input>
         </form>
             <% }) %>
 
