@@ -58,9 +58,12 @@ app.get("/", function(req, res){
 
     Item.find({}, function(err, items){
         if (err) { throw err} else {
-            items.forEach(function(item){
-                dailyItems.push(item);
-            })
+           
+            if (dailyItems.length <= 3) {
+                items.forEach(function(item){
+                    dailyItems.push(item);
+                })
+            }
         };
         
         List.find({}, function(err, lists){
@@ -151,10 +154,9 @@ app.post("/delete", function(req, res){
 
 app.post("/deletelist", function(req, res){
     let listTitle = req.body.listName;
-    console.log("Deleting list");
+
     List.deleteOne({name: listTitle}, function(err){
         if (!err) {
-            console.log("Succesfully deleted list " + listTitle);
             res.redirect("/");
         }
     })
