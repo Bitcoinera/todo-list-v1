@@ -36,13 +36,15 @@
         </form>
     </div>
     
-    <form action="/" method="GET">
-        <button class="switch" type="submit" name="home">Home</button>
-    </form>
-
-    <form action="/deletelist" method="POST">
-        <input type="hidden" name="listName" value="<%= listTitle%>"></input>
-        <button class="switch" type="submit">Delete List</button>
-    </form>
+    <div class="box">
+        <form action="/" method="GET">
+            <button class="switch inline" type="submit" name="home">Home</button>
+        </form>
+    
+        <form action="/deletelist" method="POST">
+            <input type="hidden" name="listName" value="<%= listTitle%>"></input>
+            <button class="switch" type="submit" id="deleteButton">Delete List</button>
+        </form>
+    </div>
 
 <%- include("footer") -%>
