@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const date = require(__dirname + "/date.js");
 const schema = require(__dirname + "/schemas.js");
-const mongoose = require("mongoose");
 const _ = require("lodash");
 
 const app = express();
@@ -25,7 +24,7 @@ const item2 = new Item({
 })
 
 const item3 = new Item({
-    item: "Create your own custom list just by typing its name in the url"
+    item: "Create your own custom list"
 })
 
 const defaultItems = [item1, item2, item3];
@@ -68,6 +67,20 @@ app.get("/", function(req, res){
 
 app.get("/favicon.ico", function(req, res){
     res.redirect("/");
+})
+
+app.get("/createlist", function(req, res){
+    let listLists = [];
+
+    List.find({}, function(err, lists){
+        if (!err) {
+            lists.forEach(function(list){
+                listLists.push(list.name);
+            })
+        }
+        res.render("createlist", {lists: listLists});
+    })
+
 })
 
 app.get("/:customListName", function(req, res){
@@ -149,6 +162,21 @@ app.post("/deletelist", function(req, res){
     List.deleteOne({name: listTitle}, function(err){
         if (!err) {
             res.redirect("/");
+        }
+    })
+})
+
+app.post("/createlist", function(req, res){
+    let listTitle = req.body.newList;
+    
+    List.findOne({name: listTitle}).then(list => {
+        if (list) {
+            res.redirect("/" + listTitle);
+        } else {
+          List.create({name: listTitle}).then(list => {
+            console.log("List " + listTitle + " successfully created");
+          });
+        res.redirect("/" + listTitle);
         }
     })
 })

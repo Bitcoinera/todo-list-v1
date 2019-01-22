@@ -1,0 +1,30 @@
+<%- include("header") -%>
+
+<nav class="navbar navbar-default">
+    <div class="container">
+    <div class="navbar-header">
+        <p class="navbar-brand">TODO LIST</p>
+    </div>
+        <ul class="nav navbar-nav navbar-right">
+        <li><a href="/">HOME</a></li>
+        <% lists.forEach(function(list){%>
+            <li><a href="/<%= list %>"><%= list %></a></li>
+        <% }) %>
+        </ul>
+    </div>
+</nav>
+
+<div class="box">
+    <h1>Create your own custom To-Do List</h1>
+    
+        <form action="/createlist" method="POST">
+            <div class="form-group">
+                <input class="form-control" type="text" name="newList" placeholder="New list name" autofocus>
+            </div>
+            <div class="container">
+                <button class="switch center" type="submit" name="submit" id="createbutton">Create</button>
+            </div>
+        </form>
+</div>
+
+<%- include("footer") -%>
