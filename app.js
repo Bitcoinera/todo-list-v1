@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const date = require(__dirname + "/date.js");
+const schema = require(__dirname + "/schemas.js");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 
@@ -12,26 +13,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://admin-ana:<PASSWORD>@cluster0-hbymp.mongodb.net/todolistDB", {useNewUrlParser: true});
-
-var itemSchema = mongoose.Schema({
-    item: {
-        type: String,
-        required: true
-    }
-})
-
-const Item = mongoose.model('Item', itemSchema);
-
-const listSchema = {
-    name: {
-        type: String,
-        required: true
-    },
-    items: [itemSchema]
-}
-
-const List = mongoose.model('List', listSchema);
+const Item = schema.Item;
+const List = schema.List;
 
 const item1 = new Item({
     item: "Add your own items"
@@ -46,6 +29,11 @@ const item3 = new Item({
 })
 
 const defaultItems = [item1, item2, item3];
+
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
 
 
 app.get("/", function(req, res){
@@ -124,9 +112,7 @@ app.post("/", function(req, res){
         res.redirect("/");
     } else {
 
-        List.findOne({name: listTitle}, function(err, foundList){
-            foundList.items.push(item);
-            foundList.save();
+        List.updateOne({name: listTitle}, {$addToSet: {items: item}}, function(err){
             if (!err){
             res.redirect("/" + listTitle);
             }
@@ -166,11 +152,6 @@ app.post("/deletelist", function(req, res){
         }
     })
 })
-
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 3000;
-}
 
 app.listen(port, function(){
     console.log("The server has started successfully");
