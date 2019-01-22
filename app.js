@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://admin-ana:Ha7aIBDCaoMmNzhf@cluster0-hbymp.mongodb.net/todolistDB", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://admin-ana:<PASSWORD>@cluster0-hbymp.mongodb.net/todolistDB", {useNewUrlParser: true});
 
 var itemSchema = mongoose.Schema({
     item: {
