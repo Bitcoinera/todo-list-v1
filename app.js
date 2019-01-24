@@ -167,7 +167,7 @@ app.post("/deletelist", function(req, res){
 })
 
 app.post("/createlist", function(req, res){
-    let listTitle = req.body.newList;
+    let listTitle = _.capitalize(req.body.newList);
     
     List.findOne({name: listTitle}).then(list => {
         if (list) {

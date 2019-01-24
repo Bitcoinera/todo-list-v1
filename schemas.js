@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb+srv://admin-ana:<PASSWORD>@cluster0-hbymp.mongodb.net/todolistDB", {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost:27017/myproject', {useNewUrlParser: true});
 
 const db = mongoose.connection;
 
@@ -26,5 +26,8 @@ const listSchema = {
 
 const List = db.model('List', listSchema);
 
-exports.Item = Item;
-exports.List = List;
+module.exports = {
+    Item,
+    List
+};
+

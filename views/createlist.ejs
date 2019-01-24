@@ -15,16 +15,16 @@
 </nav>
 
 <div class="box">
-    <h1>Create your own custom To-Do List</h1>
+    <h1 style="color: #A683E3; text-align: center">Create your own custom To-Do List</h1>
     
-        <form action="/createlist" method="POST">
-            <div class="form-group">
-                <input class="form-control" type="text" name="newList" placeholder="New list name" autofocus>
-            </div>
-            <div class="container">
-                <button class="switch center" type="submit" name="submit" id="createbutton">Create</button>
-            </div>
-        </form>
+    <form action="/createlist" method="POST">
+        <div class="center">
+            <input class="form-control" type="text" name="newList" placeholder="New list name" autofocus>
+        </div>
+        <div class="center">
+            <button class="switch" type="submit" name="submit" id="createbutton">Create</button>
+        </div>
+    </form>
 </div>
 
 <%- include("footer") -%>
