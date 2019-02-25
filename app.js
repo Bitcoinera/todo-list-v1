@@ -1,7 +1,8 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const date = require(__dirname + '/date.js');
+const ItemGeneration = require('./queries');
 
 const app = express();
 
@@ -24,9 +25,13 @@ app.get('/', function(req, res){
 
 app.post('/', function(req, res){
     let list = req.body.list;
+    let newItem = {
+        todo: req.body.newItem
+    }
 
-    defaultItems.push(req.body.newItem);
+    defaultItems.push(newItem.todo);
 
+    ItemGeneration.storeItem(newItem);
     res.redirect('/');
 })
 
@@ -43,9 +48,11 @@ app.get('/:newListName', function(req, res){
 
 app.post('/:newListName', function(req, res){
     let newListName = req.params.newListName;
+    let newItem = req.body.newItem;
+    defaultItems.push(newItem);
 
-    defaultItems.push(req.body.newItem);
-
+    ItemGeneration.storeItem(newItem);
+    
     res.redirect('/' + newListName);
 })
 

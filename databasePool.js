@@ -16,5 +16,4 @@ module.exports = pool;
 pool.query('SELECT * from item', (err, res) => {
     if (err) return console.log('error: ', err);
     console.log('res.rows', res.rows);
-    pool.end();
 })

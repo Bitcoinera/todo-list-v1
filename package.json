@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "configure": "./bin/configure_db.sh",
     "start": "./app.js",
-    "dev": "./app.js"
+    "dev": "./app.js",
+    "configure-dev": "npm run configure && npm run dev"
   },
   "author": "anagutjor",
   "license": "ISC",
