@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const date = require(__dirname + '/date.js');
-const ItemGeneration = require('./queries');
+const ItemTable = require('./queries');
 
 const app = express();
 
@@ -19,6 +19,8 @@ const defaultItems= [item1, item2];
 app.get('/', function(req, res){
 
     let day = date.getDate()
+    
+    ItemTable.getItem();
 
     res.render('list', {listTitle: day, items: defaultItems});
 })
@@ -31,7 +33,8 @@ app.post('/', function(req, res){
 
     defaultItems.push(newItem.todo);
 
-    ItemGeneration.storeItem(newItem);
+    ItemTable.storeItem(newItem);
+    
     res.redirect('/');
 })
 
@@ -48,10 +51,13 @@ app.get('/:newListName', function(req, res){
 
 app.post('/:newListName', function(req, res){
     let newListName = req.params.newListName;
-    let newItem = req.body.newItem;
-    defaultItems.push(newItem);
+    let newItem = {
+        todo: req.body.newItem  // property to adapt to DDBB
+    }
+    
+    defaultItems.push(newItem.todo);
 
-    ItemGeneration.storeItem(newItem);
+    ItemTable.storeItem(newItem);
     
     res.redirect('/' + newListName);
 })
