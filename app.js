@@ -19,10 +19,19 @@ const defaultItems= [item1, item2];
 app.get('/', function(req, res){
 
     let day = date.getDate()
+    let listItems = [];
     
-    ItemTable.getItem();
-
-    res.render('list', {listTitle: day, items: defaultItems});
+    ItemTable.getItem()
+        .then(({items}) => {
+            if (items.length === 0) {
+                console.log('should display only defaultitems');
+            }
+            console.log(items);
+            listItems = items;
+            defaultItems.push(listItems);
+            res.render('list', {listTitle: day, items: defaultItems});
+        })
+        .catch((error) => console.error(error));
 })
 
 app.post('/', function(req, res){
@@ -33,8 +42,12 @@ app.post('/', function(req, res){
 
     defaultItems.push(newItem.todo);
 
-    ItemTable.storeItem(newItem);
-    
+    ItemTable.storeItem(newItem)
+        .then(({itemId}) => {
+            console.log('new item', itemId, newItem.todo);
+        })
+        .catch(error => console.error(error));
+            
     res.redirect('/');
 })
 
@@ -57,7 +70,11 @@ app.post('/:newListName', function(req, res){
     
     defaultItems.push(newItem.todo);
 
-    ItemTable.storeItem(newItem);
+    ItemTable.storeItem(newItem)
+        .then(({itemId}) => {
+            console.log('new item', itemId, newItem.todo);
+        })
+        .catch(error => console.error(error));
     
     res.redirect('/' + newListName);
 })
