@@ -2,7 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const date = require(__dirname + '/date.js');
-const ItemTable = require('./queries');
+const ItemTable = require('./queries').ItemTable;
+const ListTable = require('./queries').ListTable;
 
 const app = express();
 
@@ -43,7 +44,7 @@ app.post('/', function(req, res){
 
     ItemTable.storeItem(newItem)
         .then(({itemId}) => {
-            console.log('new item', itemId, newItem.todo);
+            console.log('new item', itemId, newItem.todo, 'created');
         })
         .catch(error => console.error(error));
             
@@ -56,9 +57,15 @@ app.get('/work', function(req, res){
 })
 
 app.get('/:newListName', function(req, res){
-    let newListName = req.params.newListName;
+    let newList = {
+        title: req.params.newListName
+    }
 
-    res.render('list', {listTitle: newListName, items: defaultItems});
+    ListTable.storeList(newList)
+        .then(listId => console.log('new list', listId, newList.title, 'created'))
+        .catch(error => console.error(error));
+
+    res.render('list', {listTitle: newList.title, items: defaultItems});
 })
 
 app.post('/:newListName', function(req, res){

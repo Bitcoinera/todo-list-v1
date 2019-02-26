@@ -8,5 +8,6 @@ dropdb -U node_user todolist
 createdb -U node_user todolist
 
 psql -U node_user todolist < ./bin/sql/item.sql
+psql -U node_user todolist < ./bin/sql/list.sql
 
 echo "Configured todolist"

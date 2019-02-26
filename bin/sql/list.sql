@@ -1,0 +1,4 @@
+CREATE TABLE list (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(64)
+);

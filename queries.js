@@ -26,4 +26,19 @@ class ItemTable {
     }
 }
 
-module.exports = ItemTable;
+class ListTable {
+
+    static storeList(list) {
+        return new Promise ((resolve, reject) => {
+            pool.query('INSERT INTO list(title) VALUES($1) RETURNING id', [list.title], (err, res) => {
+                if (err) return reject(err);
+
+                const listId = res.rows[0].id;
+
+                resolve({ listId });
+            });
+        })
+    }
+}
+
+module.exports = {ItemTable, ListTable};
