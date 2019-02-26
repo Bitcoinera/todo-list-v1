@@ -10,6 +10,8 @@ node app.js
 
 2. mongo branch: mongoDB.
 
+3. postgresql branch: postgres.
+
 
 App deployed can be found at: 
 
