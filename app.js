@@ -24,12 +24,11 @@ app.get('/', function(req, res){
     ItemTable.getItem()
         .then(({items}) => {
             if (items.length === 0) {
-                console.log('should display only defaultitems');
+                listItems.push(defaultItems);
             }
             console.log(items);
             listItems = items;
-            defaultItems.push(listItems);
-            res.render('list', {listTitle: day, items: defaultItems});
+            res.render('list', {listTitle: day, items: listItems});
         })
         .catch((error) => console.error(error));
 })
