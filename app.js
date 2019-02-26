@@ -51,9 +51,9 @@ app.post('/', function(req, res){
     res.redirect('/');
 })
 
-app.get('/work', function(req, res){
-
-    res.render('list', {listTitle: 'Work List', items: newWorkItems});
+app.get("/favicon.ico", function(req, res){
+    
+    res.redirect("/");
 })
 
 app.get('/:newListName', function(req, res){
