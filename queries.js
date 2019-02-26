@@ -5,8 +5,8 @@ class ItemTable {
         return new Promise((resolve, reject) => {
             pool.query('SELECT todo FROM item', (err, res) => {
                 if (err) return reject(err);
-                console.log(res.rows[0].todo);
-                let items = [res.rows[0].todo];
+                let itemsObject = res.rows;
+                let items = itemsObject.map(item => item.todo);
 
                 resolve({ items });
             });

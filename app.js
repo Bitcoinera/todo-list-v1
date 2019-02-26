@@ -26,7 +26,7 @@ app.get('/', function(req, res){
             if (items.length === 0) {
                 listItems.push(defaultItems);
             }
-            console.log(items);
+
             listItems = items;
             res.render('list', {listTitle: day, items: listItems});
         })
