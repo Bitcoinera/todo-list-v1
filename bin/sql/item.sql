@@ -1,5 +1,6 @@
 CREATE TABLE item (
     id      SERIAL PRIMARY KEY,
-    todo    VARCHAR(10000),
+    todo    TEXT,
+    list VARCHAR(64),
     CONSTRAINT same_todo UNIQUE(todo)
 );

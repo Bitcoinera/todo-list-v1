@@ -21,6 +21,14 @@ app.get('/', function(req, res){
 
     let day = date.getDate()
     let listItems = [];
+    let listLists = [];
+
+    ListTable.getLists()
+        .then(({lists}) => {
+            listLists = lists;
+            console.log(listLists)
+        })
+        .catch(err => console.error(err))
     
     ItemTable.getItem()
         .then(({items}) => {
@@ -29,24 +37,35 @@ app.get('/', function(req, res){
             }
 
             listItems = items;
-            res.render('list', {listTitle: day, items: listItems});
+            res.render('list', {listTitle: day, items: listItems, lists: listLists});
         })
         .catch((error) => console.error(error));
 })
 
 app.post('/', function(req, res){
-    let list = req.body.list;
+    let listTitle = req.body.list;
     let newItem = {
-        todo: req.body.newItem
+        todo: req.body.newItem,
+        list: req.body.list
     }
 
     defaultItems.push(newItem.todo);
-
-    ItemTable.storeItem(newItem)
-        .then(itemId => console.log('new item', itemId, newItem.todo, 'created'))
+    
+    if (listTitle.includes("Sunday") || listTitle.includes("Monday") || listTitle.includes("Tuesday") || listTitle.includes("Wednesday") || listTitle.includes("Thursday") || listTitle.includes("Friday") || listTitle.includes("Saturday")) {
+        newItem.list = null;
+        
+        ItemTable.storeItem(newItem)
+        .then(itemId => console.log('new item', itemId, newItem.todo, newItem.list, 'created'))
         .catch(error => console.error(error));
-            
-    res.redirect('/');
+
+        res.redirect('/');
+    } else {
+        ItemTable.storeItem(newItem)
+        .then(itemId => console.log('new item', itemId, newItem.todo, newItem.list, 'created'))
+        .catch(error => console.error(error));
+
+        res.redirect('/' + listTitle);
+    }
 })
 
 app.get("/favicon.ico", function(req, res){
@@ -54,33 +73,18 @@ app.get("/favicon.ico", function(req, res){
     res.redirect("/");
 })
 
-app.get('/:newListName', function(req, res){
+app.get('/:customListName', function(req, res){
     let newList = {
-        title: req.params.newListName
+        title: req.params.customListName
     }
 
     ListTable.storeList(newList)
         .then(listId => console.log('new list', listId, newList.title, 'created'))
         .catch(error => console.error(error));
 
+    ListTable.getItemsofList();
+
     res.render('list', {listTitle: newList.title, items: defaultItems});
-})
-
-app.post('/:newListName', function(req, res){
-    let newListName = req.params.newListName;
-    let newItem = {
-        todo: req.body.newItem  // property to adapt to DDBB
-    }
-    
-    defaultItems.push(newItem.todo);
-
-    ItemTable.storeItem(newItem)
-        .then(({itemId}) => {
-            console.log('new item', itemId, newItem.todo);
-        })
-        .catch(error => console.error(error));
-    
-    res.redirect('/' + newListName);
 })
 
 app.listen(3000, function(){

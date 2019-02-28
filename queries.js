@@ -8,21 +8,21 @@ class ItemTable {
                 let itemsObject = res.rows;
                 let items = itemsObject.map(item => item.todo);
 
-                resolve({ items });
+                resolve({items});
             });
         });
     }
 
     static storeItem(item) {
         return new Promise((resolve, reject) => {
-            pool.query(`INSERT INTO item(todo) VALUES($1) ON CONFLICT ON CONSTRAINT same_todo
-            DO NOTHING RETURNING id`, [item.todo], (err, res) => {
+            pool.query(`INSERT INTO item(todo, list) VALUES($1, $2) ON CONFLICT ON CONSTRAINT same_todo
+            DO NOTHING RETURNING id`, [item.todo, item.list], (err, res) => {
                 if (err) return reject(err);
 
                 if (res.rows[0]) {
                     const itemId = res.rows[0].id;
 
-                    resolve({ itemId });
+                    resolve({itemId});
                 }
             });
         });
@@ -30,6 +30,19 @@ class ItemTable {
 }
 
 class ListTable {
+
+    static getLists() {
+        return new Promise ((resolve, reject) => {
+            pool.query(`SELECT title FROM list`, (err, res) => {
+                if (err) return reject(err);
+
+                let listsObject = res.rows;
+                let lists = listsObject.map(list => list.title);
+
+                resolve({lists});
+            })
+        })
+    }
 
     static storeList(list) {
         return new Promise ((resolve, reject) => {
@@ -40,9 +53,19 @@ class ListTable {
                 if (res.rows[0]) {
                     const listId = res.rows[0].id;
 
-                    resolve({ listId });
+                    resolve({listId});
                 }
             });
+        })
+    }
+
+    static getItemsofList() {
+        return new Promise ((resolve, reject) => {
+            pool.query(`SELECT todo, list, title FROM item, list WHERE title = list`, (err, res) => {
+                if (err) return reject(err);
+
+                console.log('items of list', res.rows)
+            })
         })
     }
 }
