@@ -59,12 +59,15 @@ class ListTable {
         })
     }
 
-    static getItemsofList() {
+    static getItemsOfList() {
         return new Promise ((resolve, reject) => {
             pool.query(`SELECT todo, list, title FROM item, list WHERE title = list`, (err, res) => {
                 if (err) return reject(err);
 
-                console.log('items of list', res.rows)
+                let itemsObject = res.rows;
+                let itemsOfList = itemsObject.map(item => item.todo);
+
+                resolve({itemsOfList});
             })
         })
     }

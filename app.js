@@ -28,15 +28,15 @@ app.get('/', function(req, res){
             listLists = lists;
             console.log(listLists)
         })
-        .catch(err => console.error(err))
+        .catch(error => console.error(error))
     
-    ItemTable.getItem()
-        .then(({items}) => {
-            if (items.length === 0) {
+    ListTable.getItemsOfList()
+        .then(({itemsOfList}) => {
+            if (itemsOfList.length === 0) {
                 listItems.push(defaultItems);
             }
 
-            listItems = items;
+            listItems = itemsOfList;
             res.render('list', {listTitle: day, items: listItems, lists: listLists});
         })
         .catch((error) => console.error(error));
@@ -82,9 +82,13 @@ app.get('/:customListName', function(req, res){
         .then(listId => console.log('new list', listId, newList.title, 'created'))
         .catch(error => console.error(error));
 
-    ListTable.getItemsofList();
+    ListTable.getItemsOfList()
+        .then(({itemsOfList}) => {
+            let items = defaultItems.concat(itemsOfList);
 
-    res.render('list', {listTitle: newList.title, items: defaultItems});
+            res.render('list', {listTitle: newList.title, items: items});
+        })
+        .catch(error => console.error(error));
 })
 
 app.listen(3000, function(){
