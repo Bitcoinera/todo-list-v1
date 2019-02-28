@@ -43,9 +43,7 @@ app.post('/', function(req, res){
     defaultItems.push(newItem.todo);
 
     ItemTable.storeItem(newItem)
-        .then(({itemId}) => {
-            console.log('new item', itemId, newItem.todo, 'created');
-        })
+        .then(itemId => console.log('new item', itemId, newItem.todo, 'created'))
         .catch(error => console.error(error));
             
     res.redirect('/');
