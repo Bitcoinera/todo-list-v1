@@ -29,7 +29,6 @@ app.get('/', function(req, res){
     ListTable.getLists()
         .then(({lists}) => {
             listLists = lists;
-            console.log(listLists)
         })
         .catch(error => console.error(error))
     
@@ -44,6 +43,19 @@ app.get('/', function(req, res){
             res.render('list', {listTitle: day, items: listItems, lists: listLists});
         })
         .catch((error) => console.error(error));
+})
+
+app.post('/createlist', function(req, res){
+    let newList = {
+        title: req.body.newList
+    }
+
+    ListTable.storeList(newList)
+    .then(listId => {
+        console.log('new list', listId, newList.title, 'created');
+        res.redirect('/' + newList.title);
+    })
+    .catch(error => console.error(error));
 })
 
 app.post('/', function(req, res){
@@ -82,6 +94,17 @@ app.get("/favicon.ico", function(req, res){
     res.redirect("/");
 })
 
+app.get('/createlist', function(req, res){
+    let listLists = [];
+
+    ListTable.getLists()
+    .then(({lists}) => {
+        listLists = lists;
+        res.render('createlist', {lists: listLists});
+    })
+    .catch(error => console.error(error))
+})
+
 app.get('/:customListName', function(req, res){
     let newList = {
         title: req.params.customListName
@@ -96,7 +119,6 @@ app.get('/:customListName', function(req, res){
     ListTable.getLists()
     .then(({lists}) => {
         listLists = lists;
-        console.log(listLists)
     })
     .catch(error => console.error(error))
 
@@ -119,8 +141,19 @@ app.post('/delete', function(req, res){
     
     ItemTable.deleteItem(todo)
         .then(() => {
-            console.log(`Item deleted with todo: ${todo}`)
-            res.redirect('/' + listTitle)
+            console.log(`Item deleted with todo: ${todo}`);
+            res.redirect('/' + listTitle);
+        })
+        .catch(error => console.error(error));
+})
+
+app.post('/deleteList', function(req, res){
+    let title = req.body.list;
+
+    ListTable.deleteList({title})
+        .then(() => {
+            console.log(`list ${title} has been deleted`);
+            res.redirect('/');
         })
         .catch(error => console.error(error));
 })

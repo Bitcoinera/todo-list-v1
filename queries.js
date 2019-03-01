@@ -81,6 +81,16 @@ class ListTable {
             })
         })
     }
+
+    static deleteList({title}) {
+        return new Promise ((resolve, reject) => {
+            pool.query(`DELETE FROM list WHERE title = $1`, [title], (err, res) => {
+                if (err) return reject(err);
+
+                resolve();
+            })
+        })
+    }
 }
 
 module.exports = {ItemTable, ListTable};
