@@ -14,7 +14,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 
 let item1 = 'Add any new items you\'d like';
-let item2 = 'Delete the items just by clicking the checkbox'
+
+let item2 = 'Delete the items just by clicking the checkbox';
+
 const defaultItems= [item1, item2];
 
 app.get('/', function(req, res){
@@ -22,6 +24,7 @@ app.get('/', function(req, res){
     let day = date.getDate()
     let listItems = [];
     let listLists = [];
+    let list = 'home';
 
     ListTable.getLists()
         .then(({lists}) => {
@@ -30,13 +33,14 @@ app.get('/', function(req, res){
         })
         .catch(error => console.error(error))
     
-    ListTable.getItemsOfList()
+    ListTable.getItemsOfList({list})
         .then(({itemsOfList}) => {
             if (itemsOfList.length === 0) {
                 listItems.push(defaultItems);
-            }
 
-            listItems = itemsOfList;
+            } else {
+                listItems = defaultItems.concat(itemsOfList);
+            }
             res.render('list', {listTitle: day, items: listItems, lists: listLists});
         })
         .catch((error) => console.error(error));
@@ -52,7 +56,7 @@ app.post('/', function(req, res){
     defaultItems.push(newItem.todo);
     
     if (listTitle.includes("Sunday") || listTitle.includes("Monday") || listTitle.includes("Tuesday") || listTitle.includes("Wednesday") || listTitle.includes("Thursday") || listTitle.includes("Friday") || listTitle.includes("Saturday")) {
-        newItem.list = null;
+        newItem.list = 'home';
         
         ItemTable.storeItem(newItem)
         .then(itemId => console.log('new item', itemId, newItem.todo, newItem.list, 'created'))
@@ -77,12 +81,13 @@ app.get('/:customListName', function(req, res){
     let newList = {
         title: req.params.customListName
     }
+    let list = newList.title;
 
     ListTable.storeList(newList)
         .then(listId => console.log('new list', listId, newList.title, 'created'))
         .catch(error => console.error(error));
 
-    ListTable.getItemsOfList()
+    ListTable.getItemsOfList({list})
         .then(({itemsOfList}) => {
             let items = defaultItems.concat(itemsOfList);
 

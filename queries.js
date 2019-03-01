@@ -59,9 +59,9 @@ class ListTable {
         })
     }
 
-    static getItemsOfList() {
+    static getItemsOfList({list}) {
         return new Promise ((resolve, reject) => {
-            pool.query(`SELECT todo, list, title FROM item, list WHERE title = list`, (err, res) => {
+            pool.query(`SELECT todo FROM item WHERE item.list = $1`, [list], (err, res) => {
                 if (err) return reject(err);
 
                 let itemsObject = res.rows;
