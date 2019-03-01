@@ -36,7 +36,7 @@ app.get('/', function(req, res){
     ListTable.getItemsOfList({list})
         .then(({itemsOfList}) => {
             if (itemsOfList.length === 0) {
-                listItems.push(defaultItems);
+                listItems = defaultItems;
 
             } else {
                 listItems = [...defaultItems, ...itemsOfList];
