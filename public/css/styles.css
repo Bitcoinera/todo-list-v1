@@ -175,6 +175,12 @@ footer {
     float: right !important;
   }
 
+  ul.nav.navbar-nav.navbar-right {
+    position: absolute;
+    top: 15px;
+    right: 5px;
+  }
+
   .list {
     width: 320px;
   }
