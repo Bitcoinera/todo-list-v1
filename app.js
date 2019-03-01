@@ -98,12 +98,16 @@ app.get('/:customListName', function(req, res){
 
 app.post('/delete', function(req, res){
     let todo = req.body.checkbox;
-    let list = req.body.list;
+    let listTitle = req.body.list;
 
+    if (listTitle.includes("Sunday") || listTitle.includes("Monday") || listTitle.includes("Tuesday") || listTitle.includes("Wednesday") || listTitle.includes("Thursday") || listTitle.includes("Friday") || listTitle.includes("Saturday")) {
+        listTitle = '';
+    }
+    
     ItemTable.deleteItem(todo)
         .then(() => {
             console.log(`Item deleted with todo: ${todo}`)
-            res.redirect('/' + list)
+            res.redirect('/' + listTitle)
         })
         .catch(error => console.error(error));
 })
