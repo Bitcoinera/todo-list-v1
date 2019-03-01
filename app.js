@@ -39,7 +39,7 @@ app.get('/', function(req, res){
                 listItems.push(defaultItems);
 
             } else {
-                listItems = defaultItems.concat(itemsOfList);
+                listItems = [...defaultItems, ...itemsOfList];
             }
             res.render('list', {listTitle: day, items: listItems, lists: listLists});
         })
@@ -89,7 +89,7 @@ app.get('/:customListName', function(req, res){
 
     ListTable.getItemsOfList({list})
         .then(({itemsOfList}) => {
-            let items = defaultItems.concat(itemsOfList);
+            let items = [...defaultItems, ...itemsOfList];
 
             res.render('list', {listTitle: newList.title, items: items});
         })
