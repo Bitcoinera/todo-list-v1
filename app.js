@@ -53,6 +53,11 @@ app.post('/', function(req, res){
         list: req.body.list
     }
     
+    if (newItem.todo === '') {
+        console.log('item todo cannot be empty');
+        res.redirect('/');
+    }
+
     if (listTitle.includes("Sunday") || listTitle.includes("Monday") || listTitle.includes("Tuesday") || listTitle.includes("Wednesday") || listTitle.includes("Thursday") || listTitle.includes("Friday") || listTitle.includes("Saturday")) {
         newItem.list = 'home';
         
