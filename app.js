@@ -87,16 +87,24 @@ app.get('/:customListName', function(req, res){
         title: req.params.customListName
     }
     let list = newList.title;
+    let listLists = [];
 
     ListTable.storeList(newList)
         .then(listId => console.log('new list', listId, newList.title, 'created'))
         .catch(error => console.error(error));
+    
+    ListTable.getLists()
+    .then(({lists}) => {
+        listLists = lists;
+        console.log(listLists)
+    })
+    .catch(error => console.error(error))
 
     ListTable.getItemsOfList({list})
         .then(({itemsOfList}) => {
             let items = [...defaultItems, ...itemsOfList];
 
-            res.render('list', {listTitle: newList.title, items: items});
+            res.render('list', {listTitle: newList.title, items: items, lists: listLists});
         })
         .catch(error => console.error(error));
 })

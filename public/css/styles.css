@@ -5,9 +5,40 @@ html {
   font-family: 'helvetica neue';
 }
 
+body {
+  background-color: transparent;
+}
+
 h1 {
   color: #fff;
   padding: 10px;
+}
+ul {
+  list-style-type: none;
+}
+
+.navbar {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border: 0;
+  border-radius: 0;
+  margin-bottom: 0;
+  font-size: 20px;
+  letter-spacing: 5px;
+}
+
+.navbar-brand {
+  color: rgba(64, 16, 146) !important;
+  font-family: 'Raleway', sans-serif;
+  font-size: 25px;
+}
+
+.navbar-nav li a {
+  color: #A683E3 !important;
+}
+
+.navbar-nav li a:hover {
+  color: rgba(64, 16, 146) !important;
 }
 
 .box {

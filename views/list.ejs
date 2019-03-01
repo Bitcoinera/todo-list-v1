@@ -1,9 +1,23 @@
 <%- include("header") -%>
 
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <p class="navbar-brand">TODO-LIST</p>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/">HOME</a></li>
+            <% lists.forEach(function(list) { %>
+                <li><a href="/<%= list%>" ><%= list %></a></li>
+            <% }); %>
+            </ul>
+        </div>
+    </nav>
+    
     <div class="box" id="heading">
             <h1><%= listTitle %></h1>
     </div>
-    
+
     <div class="box">
         <% items.forEach(function(item) {%>
         <form action="/delete" method="POST">
