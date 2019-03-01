@@ -33,7 +33,7 @@ class ItemTable {
             pool.query(`DELETE FROM item WHERE todo = $1`, [todo], (err, res) => {
                 if (err) return reject(err);
 
-                resolve(console.log(`Item deleted with todo: ${todo}`));
+                resolve();
             })
         })
     }

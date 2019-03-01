@@ -57,16 +57,18 @@ app.post('/', function(req, res){
         newItem.list = 'home';
         
         ItemTable.storeItem(newItem)
-        .then(itemId => console.log('new item', itemId, newItem.todo, newItem.list, 'created'))
+        .then(itemId => {
+            console.log('new item', itemId, newItem.todo, newItem.list, 'created');
+            res.redirect('/');
+        })
         .catch(error => console.error(error));
-
-        res.redirect('/');
     } else {
         ItemTable.storeItem(newItem)
-        .then(itemId => console.log('new item', itemId, newItem.todo, newItem.list, 'created'))
+        .then(itemId => {
+            console.log('new item', itemId, newItem.todo, newItem.list, 'created');
+            res.redirect('/' + listTitle);
+    })
         .catch(error => console.error(error));
-
-        res.redirect('/' + listTitle);
     }
 })
 
@@ -99,7 +101,10 @@ app.post('/delete', function(req, res){
     let list = req.body.list;
 
     ItemTable.deleteItem(todo)
-        .then(res.redirect('/' + list))
+        .then(() => {
+            console.log(`Item deleted with todo: ${todo}`)
+            res.redirect('/' + list)
+        })
         .catch(error => console.error(error));
 })
 
