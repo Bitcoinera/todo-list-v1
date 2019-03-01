@@ -18,6 +18,7 @@ ul {
 }
 
 .navbar {
+  overflow: hidden;
   padding-top: 15px;
   padding-bottom: 15px;
   border: 0;
@@ -35,6 +36,8 @@ ul {
 
 .navbar-nav li a {
   color: #A683E3 !important;
+  display: block !important;
+  float: left;
 }
 
 .navbar-nav li a:hover {
@@ -164,4 +167,21 @@ footer {
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+@media screen and (max-width: 600px) {
+  li:not(:first-child) {display: none !important;}
+  li:first-child {
+    float: right !important;
+  }
+
+  .list {
+    width: 320px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .list {
+    width: 280px;
+  }
 }
