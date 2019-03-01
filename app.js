@@ -52,8 +52,6 @@ app.post('/', function(req, res){
         todo: req.body.newItem,
         list: req.body.list
     }
-
-    defaultItems.push(newItem.todo);
     
     if (listTitle.includes("Sunday") || listTitle.includes("Monday") || listTitle.includes("Tuesday") || listTitle.includes("Wednesday") || listTitle.includes("Thursday") || listTitle.includes("Friday") || listTitle.includes("Saturday")) {
         newItem.list = 'home';
@@ -93,6 +91,15 @@ app.get('/:customListName', function(req, res){
 
             res.render('list', {listTitle: newList.title, items: items});
         })
+        .catch(error => console.error(error));
+})
+
+app.post('/delete', function(req, res){
+    let todo = req.body.checkbox;
+    let list = req.body.list;
+
+    ItemTable.deleteItem(todo)
+        .then(res.redirect('/' + list))
         .catch(error => console.error(error));
 })
 
