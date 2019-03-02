@@ -1,5 +1,3 @@
-const ListTable = require('./tables').ListTable;
-const ItemTable = require('./tables').ItemTable;
 const pool = require('../databasePool');
 
 const getItemsOfList = ({list}) => {

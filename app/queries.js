@@ -26,22 +26,6 @@ class ListEngine {
             .then(listId => console.log('new list', listId, newList.title, 'created'))
             .catch(error => console.error(error));
     }
-
-    // getItemsofList(list) {
-//     ListTable.getItemsOfList({list})
-//     .then(({itemsOfList}) => {
-//         if (itemsOfList.length === 0) {
-//             this.listItems = this.defaultItems;
-
-//         } else {
-//             this.listItems = [...this.defaultItems, ...itemsOfList];
-//             console.log(this.listItems);
-//         }
-//     })
-//     .catch((error) => console.error(error));
-
-//     return this.listItems;
-// }
 }
 
 module.exports = ListEngine;
