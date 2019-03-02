@@ -16,6 +16,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static('public'));
 
+let item1 = 'Add any new items you\'d like';
+let item2 = 'Delete the items just by clicking the checkbox';
+
+const defaultItems= [item1, item2];
+
 app.get('/', function(req, res){
 
     let day = date.getDate()
@@ -25,13 +30,19 @@ app.get('/', function(req, res){
 
     listLists = listHandler.getLists();
     
-    // listItems = listHandler.getItemsofList(list);
     getItemsofList({list})
-        .then( items => {
-            console.log(items);
-            listItems = items;
-        })
-    res.render('list', {listTitle: day, items: listItems, lists: listLists});
+        .then(({itemsOfList}) => {
+        if (itemsOfList.length === 0) {
+            listItems = defaultItems;
+            res.render('list', {listTitle: day, items: listItems, lists: listLists});
+
+        } else {
+            listItems = [...defaultItems, ...itemsOfList];
+
+            res.render('list', {listTitle: day, items: listItems, lists: listLists});
+        }
+    })
+    .catch((error) => console.error(error));
 })
 
 app.post('/createlist', function(req, res){
@@ -99,13 +110,13 @@ app.get('/:customListName', function(req, res){
 
     listLists = listHandler.getLists();
 
-    // listItems = listHandler.getItemsofList(list);
     getItemsofList({list})
-        .then( items => {
-            console.log(items);
-            listItems = items;
+        .then(({itemsOfList}) => {
+            listItems = [...defaultItems, ...itemsOfList];
+
+            res.render('list', {listTitle: newList.title, items: listItems, lists: listLists});
         })
-    res.render('list', {listTitle: newList.title, items: listItems, lists: listLists});
+        .catch((error) => console.error(error));
 })
 
 app.post('/delete', function(req, res){
