@@ -1,23 +1,20 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const date = require(__dirname + '/date.js');
-const ItemTable = require('./queries').ItemTable;
-const ListTable = require('./queries').ListTable;
+const date = require('../date');
+const ItemTable = require('./tables').ItemTable;
+const ListTable = require('./tables').ListTable;
+const ListEngine = require('./queries');
+const getItemsofList = require('./helper');
 
 const app = express();
+const listHandler = new ListEngine();
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(express.static('public'));
-
-let item1 = 'Add any new items you\'d like';
-
-let item2 = 'Delete the items just by clicking the checkbox';
-
-const defaultItems= [item1, item2];
 
 app.get('/', function(req, res){
 
@@ -26,23 +23,15 @@ app.get('/', function(req, res){
     let listLists = [];
     let list = 'home';
 
-    ListTable.getLists()
-        .then(({lists}) => {
-            listLists = lists;
-        })
-        .catch(error => console.error(error))
+    listLists = listHandler.getLists();
     
-    ListTable.getItemsOfList({list})
-        .then(({itemsOfList}) => {
-            if (itemsOfList.length === 0) {
-                listItems = defaultItems;
-
-            } else {
-                listItems = [...defaultItems, ...itemsOfList];
-            }
-            res.render('list', {listTitle: day, items: listItems, lists: listLists});
+    // listItems = listHandler.getItemsofList(list);
+    getItemsofList({list})
+        .then( items => {
+            console.log(items);
+            listItems = items;
         })
-        .catch((error) => console.error(error));
+    res.render('list', {listTitle: day, items: listItems, lists: listLists});
 })
 
 app.post('/createlist', function(req, res){
@@ -50,12 +39,9 @@ app.post('/createlist', function(req, res){
         title: req.body.newList
     }
 
-    ListTable.storeList(newList)
-    .then(listId => {
-        console.log('new list', listId, newList.title, 'created');
-        res.redirect('/' + newList.title);
-    })
-    .catch(error => console.error(error));
+    listHandler.saveList(newList);
+
+    res.redirect('/' + newList.title);
 })
 
 app.post('/', function(req, res){
@@ -97,12 +83,8 @@ app.get("/favicon.ico", function(req, res){
 app.get('/createlist', function(req, res){
     let listLists = [];
 
-    ListTable.getLists()
-    .then(({lists}) => {
-        listLists = lists;
-        res.render('createlist', {lists: listLists});
-    })
-    .catch(error => console.error(error))
+    listLists = listHandler.getLists();
+    res.render('createlist', {lists: listLists});
 })
 
 app.get('/:customListName', function(req, res){
@@ -111,24 +93,19 @@ app.get('/:customListName', function(req, res){
     }
     let list = newList.title;
     let listLists = [];
+    let listItems = [];
 
-    ListTable.storeList(newList)
-        .then(listId => console.log('new list', listId, newList.title, 'created'))
-        .catch(error => console.error(error));
-    
-    ListTable.getLists()
-    .then(({lists}) => {
-        listLists = lists;
-    })
-    .catch(error => console.error(error))
+    listHandler.saveList(newList);
 
-    ListTable.getItemsOfList({list})
-        .then(({itemsOfList}) => {
-            let items = [...defaultItems, ...itemsOfList];
+    listLists = listHandler.getLists();
 
-            res.render('list', {listTitle: newList.title, items: items, lists: listLists});
+    // listItems = listHandler.getItemsofList(list);
+    getItemsofList({list})
+        .then( items => {
+            console.log(items);
+            listItems = items;
         })
-        .catch(error => console.error(error));
+    res.render('list', {listTitle: newList.title, items: listItems, lists: listLists});
 })
 
 app.post('/delete', function(req, res){
