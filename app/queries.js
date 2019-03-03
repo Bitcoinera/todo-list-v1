@@ -1,4 +1,11 @@
 const ListTable = require('./tables').ListTable;
+const ItemTable = require('./tables').ItemTable;
+
+class ItemEngine {
+    
+    constructor() {}
+    
+}
 
 class ListEngine {
 
@@ -8,7 +15,6 @@ class ListEngine {
         this.item1 = 'Add any new items you\'d like';
         this.item2 = 'Delete the items just by clicking the checkbox';
         this.defaultItems= [this.item1, this.item2];
-
     }
 
     getLists() {
@@ -28,4 +34,4 @@ class ListEngine {
     }
 }
 
-module.exports = ListEngine;
+module.exports = { ListEngine, ItemEngine };

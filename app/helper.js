@@ -6,7 +6,6 @@ const getItemsOfList = ({list}) => {
             if (err) return reject(err);
 
             let itemsObject = res.rows;
-            console.log(itemsObject)
             let itemsOfList = itemsObject.map(item => item.todo);
 
             resolve({itemsOfList});
