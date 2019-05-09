@@ -1,4 +1,13 @@
-To run it: 
+# Run
+```
+docker-compose up
+```
+If there are conflicting container names (in this case either 'app' or 'mongo'), do
+```
+docker rm <CONTAINER ID>
+```
+
+# Run without Docker 
 
 ```
 npm i
